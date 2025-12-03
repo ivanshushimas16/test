@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Login Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; margin: 10px 0; padding: 10px; background: #ffe6e6; border-radius: 4px; }
+        .success { color: green; margin: 10px 0; padding: 10px; background: #e6ffe6; border-radius: 4px; }
+        .credentials { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Simple Login Test</h1>
+    
+    <div class="credentials">
+        <h3>Test Credentials:</h3>
+        <p><strong>Admin:</strong> admin / admin123</p>
+        <p><strong>Staff:</strong> staff001 / staff123</p>
+        <p><strong>Student:</strong> student001 / student123</p>
+    </div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Username:</label>
+            <input type="text" name="username" value="admin" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" name="password" value="admin123" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Role:</label>
+            <select name="role" required>
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+                <option value="student">Student</option>
+            </select>
+        </div>
+        
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const loginData = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                role: formData.get('role')
+            };
+
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = '<div>Logging in...</div>';
+
+            try {
+                console.log('Attempting login:', loginData);
+                
+                const response = await fetch('api/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success) {
+                    messageDiv.innerHTML = `<div class="success">Login successful! User: ${data.user.full_name} (${data.user.role})</div>`;
+                    
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        const dashboards = {
+                            admin: 'admin-dashboard.html',
+                            staff: 'staff-dashboard.html',
+                            student: 'student-dashboard.html'
+                        };
+                        window.location.href = dashboards[data.user.role] || 'login.html';
+                    }, 2000);
+                } else {
+                    messageDiv.innerHTML = `<div class="error">Login failed: ${data.message}</div>`;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageDiv.innerHTML = `<div class="error">Network error: ${error.message}<br><br>Make sure XAMPP is running and you're accessing via http://localhost/</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

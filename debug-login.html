@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Login - Student Schedule System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .debug-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .debug-output {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .test-button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Debug Login System</h1>
+        
+        <div class="debug-panel">
+            <h3>Server Tests</h3>
+            <button class="test-button" onclick="testServer()">Test PHP Server</button>
+            <button class="test-button" onclick="testDatabase()">Test Database</button>
+            <button class="test-button" onclick="testLoginAPI()">Test Login API</button>
+            <button class="test-button" onclick="clearDebug()">Clear Output</button>
+        </div>
+
+        <div class="debug-panel">
+            <h3>Quick Login Tests</h3>
+            <button class="test-button" onclick="testLogin('admin', 'admin123', 'admin')">Test Admin Login</button>
+            <button class="test-button" onclick="testLogin('staff001', 'staff123', 'staff')">Test Staff Login</button>
+            <button class="test-button" onclick="testLogin('student001', 'student123', 'student')">Test Student Login</button>
+        </div>
+
+        <div class="debug-panel">
+            <h3>Manual Login Form</h3>
+            <form id="debugLoginForm">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>Username:</label>
+                        <input type="text" name="username" value="admin" required>
+                    </div>
+                    <div class="form-col">
+                        <label>Password:</label>
+                        <input type="password" name="password" value="admin123" required>
+                    </div>
+                    <div class="form-col">
+                        <label>Role:</label>
+                        <select name="role" required>
+                            <option value="admin">Admin</option>
+                            <option value="staff">Staff</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="test-button">Login</button>
+            </form>
+        </div>
+
+        <div class="debug-panel">
+            <h3>Debug Output</h3>
+            <div id="debugOutput" class="debug-output">Ready for testing...\n</div>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('debugOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            output.innerHTML += `[${timestamp}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearDebug() {
+            document.getElementById('debugOutput').innerHTML = 'Debug output cleared...\n';
+        }
+
+        async function testServer() {
+            log('Testing PHP server...', 'info');
+            try {
+                const response = await fetch('api/test-server.php');
+                const data = await response.json();
+                if (data.success) {
+                    log(`✓ Server test passed: ${data.message}`, 'success');
+                    log(`  PHP Version: ${data.php_version}`, 'info');
+                    log(`  Server: ${data.server_info}`, 'info');
+                } else {
+                    log(`✗ Server test failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`✗ Server test failed: ${error.message}`, 'error');
+                log('  Make sure XAMPP is running and you\'re accessing via http://localhost/', 'error');
+            }
+        }
+
+        async function testDatabase() {
+            log('Testing database connection...', 'info');
+            try {
+                const response = await fetch('test-db.php');
+                const data = await response.json();
+                if (data.success) {
+                    log(`✓ Database test passed: ${data.message}`, 'success');
+                    log(`  Database: ${data.database}`, 'info');
+                } else {
+                    log(`✗ Database test failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`✗ Database test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLoginAPI() {
+            log('Testing login API endpoint...', 'info');
+            try {
+                const response = await fetch('api/login.php');
+                const data = await response.json();
+                if (data.success) {
+                    log(`✓ Login API is accessible: ${data.message}`, 'success');
+                    log('  Available test users:', 'info');
+                    data.test_users.forEach(user => {
+                        log(`    ${user.username} / ${user.password} (${user.role})`, 'info');
+                    });
+                } else {
+                    log(`✗ Login API test failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`✗ Login API test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin(username, password, role) {
+            log(`Testing login: ${username} as ${role}...`, 'info');
+            try {
+                const response = await fetch('api/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password, role })
+                });
+
+                log(`  Response status: ${response.status}`, 'info');
+                
+                const data = await response.json();
+                if (data.success) {
+                    log(`✓ Login successful for ${username}`, 'success');
+                    log(`  User: ${data.user.full_name} (${data.user.role})`, 'info');
+                } else {
+                    log(`✗ Login failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`✗ Login test failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Handle manual login form
+        document.getElementById('debugLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const username = formData.get('username');
+            const password = formData.get('password');
+            const role = formData.get('role');
+            
+            await testLogin(username, password, role);
+        });
+
+        // Auto-run basic tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testServer();
+                setTimeout(() => testDatabase(), 1000);
+                setTimeout(() => testLoginAPI(), 2000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

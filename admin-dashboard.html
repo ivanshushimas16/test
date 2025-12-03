@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CEC Student Schedule System</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Portal</h2>
+                <p id="admin-info">Loading...</p>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#overview" class="nav-link active" data-section="overview">System Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#users" class="nav-link" data-section="users">User Management</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#activity" class="nav-link" data-section="activity">Activity Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analytics" class="nav-link" data-section="analytics">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#system" class="nav-link" data-section="system">System Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#backup" class="nav-link" data-section="backup">Backup & Archive</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <h1 id="page-title">System Overview</h1>
+                <div class="user-info">
+                    <span id="welcome-message">Welcome, Administrator</span>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </header>
+
+            <!-- System Overview Section -->
+            <section id="overview-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">System Overview</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="refreshOverview()">Refresh Data</button>
+                    </div>
+                </div>
+
+                <div class="overview-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h3>Total Users</h3>
+                            <div class="stat-number" id="total-users">--</div>
+                            <div class="stat-breakdown">
+                                <span>Students: <span id="student-count">--</span></span>
+                                <span>Staff: <span id="staff-count">--</span></span>
+                                <span>Admins: <span id="admin-count">--</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-content">
+                            <h3>Academic Data</h3>
+                            <div class="stat-number" id="total-courses">--</div>
+                            <div class="stat-breakdown">
+                                <span>Active Courses: <span id="active-courses">--</span></span>
+                                <span>Schedules: <span id="total-schedules">--</span></span>
+                                <span>Enrollments: <span id="total-enrollments">--</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <h3>System Activity</h3>
+                            <div class="stat-number" id="daily-logins">--</div>
+                            <div class="stat-breakdown">
+                                <span>Today's Logins: <span id="today-logins">--</span></span>
+                                <span>Active Sessions: <span id="active-sessions">--</span></span>
+                                <span>Total Activities: <span id="total-activities">--</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-content">
+                            <h3>System Health</h3>
+                            <div class="stat-number status-good" id="system-status">Good</div>
+                            <div class="stat-breakdown">
+                                <span>Database: <span id="db-status" class="status-good">Online</span></span>
+                                <span>Last Backup: <span id="last-backup">--</span></span>
+                                <span>Disk Usage: <span id="disk-usage">--%</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>Recent System Activity</h3>
+                    <table class="data-table" id="recent-activity-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Description</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-activity-tbody">
+                            <!-- Recent activities will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- User Management Section -->
+            <section id="users-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">User Management</h2>
+                    <div class="section-actions">
+                        <select id="user-role-filter">
+                            <option value="">All Roles</option>
+                            <option value="student">Students</option>
+                            <option value="staff">Staff</option>
+                            <option value="admin">Administrators</option>
+                        </select>
+                        <input type="text" id="user-search" placeholder="Search users..." class="search-input">
+                        <!-- Changed "Add User" button to "Add Staff" per V32 -->
+                        <button class="btn btn-primary" onclick="openAddStaffModal()">Add Staff</button>
+                    </div>
+                </div>
+
+                <div class="users-grid">
+                    <table class="data-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Activity Logs Section -->
+            <section id="activity-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Activity Logs</h2>
+                    <div class="section-actions">
+                        <input type="date" id="activity-date-from" class="date-input">
+                        <input type="date" id="activity-date-to" class="date-input">
+                        <select id="activity-action-filter">
+                            <option value="">All Actions</option>
+                            <option value="LOGIN">Login</option>
+                            <option value="LOGOUT">Logout</option>
+                            <option value="VIEW_SCHEDULE">View Schedule</option>
+                            <option value="ADD_STUDENT">Add Student</option>
+                            <option value="EDIT_STUDENT">Edit Student</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="filterActivityLogs()">Filter</button>
+                        <button class="btn btn-success" onclick="exportActivityLogs()">Export</button>
+                    </div>
+                </div>
+
+                <div class="activity-logs">
+                    <table class="data-table" id="activity-logs-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                                <th>Description</th>
+                                <th>IP Address</th>
+                                <th>User Agent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-logs-tbody">
+                            <!-- Activity logs will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">System Analytics</h2>
+                    <div class="section-actions">
+                        <select id="analytics-period">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="loadAnalytics()">Update Charts</button>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3>User Login Trends</h3>
+                        <div class="chart-placeholder" id="login-trends-chart">
+                            <p>Login trends chart will be displayed here</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Enrollment Statistics</h3>
+                        <div class="chart-placeholder" id="enrollment-stats-chart">
+                            <p>Enrollment statistics chart will be displayed here</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Course Popularity</h3>
+                        <div class="chart-placeholder" id="course-popularity-chart">
+                            <p>Course popularity chart will be displayed here</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>System Usage by Hour</h3>
+                        <div class="chart-placeholder" id="usage-by-hour-chart">
+                            <p>System usage by hour chart will be displayed here</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Settings Section -->
+            <section id="system-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">System Settings</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>Academic Year Settings</h3>
+                        <form id="academic-year-form">
+                            <div class="form-group">
+                                <label>Current Academic Year</label>
+                                <input type="text" id="current-year" value="2024-2025" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Semester</label>
+                                <select id="current-semester">
+                                    <option value="1st Semester">1st Semester</option>
+                                    <option value="2nd Semester">2nd Semester</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Settings</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3>System Maintenance</h3>
+                        <div class="maintenance-actions">
+                            <button class="btn btn-warning" onclick="clearOldSessions()">Clear Old Sessions</button>
+                            <button class="btn btn-warning" onclick="cleanupLogs()">Cleanup Old Logs</button>
+                            <button class="btn btn-danger" onclick="resetSystem()">Reset System</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3>Security Settings</h3>
+                        <form id="security-form">
+                            <div class="form-group">
+                                <label>Session Timeout (hours)</label>
+                                <input type="number" id="session-timeout" value="24" min="1" max="168">
+                            </div>
+                            <div class="form-group">
+                                <label>Password Policy</label>
+                                <select id="password-policy">
+                                    <option value="basic">Basic (6+ characters)</option>
+                                    <option value="strong">Strong (8+ chars, mixed case, numbers)</option>
+                                    <option value="complex">Complex (12+ chars, symbols required)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Security</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Backup & Archive Section -->
+            <section id="backup-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Backup & Archive</h2>
+                </div>
+
+                <div class="backup-grid">
+                    <div class="backup-card">
+                        <h3>Database Backup</h3>
+                        <div class="backup-info">
+                            <p>Last Backup: <span id="last-db-backup">Never</span></p>
+                            <p>Backup Size: <span id="backup-size">--</span></p>
+                        </div>
+                        <div class="backup-actions">
+                            <button class="btn btn-primary" onclick="createBackup()">Create Backup</button>
+                            <button class="btn btn-success" onclick="downloadBackup()">Download Latest</button>
+                        </div>
+                    </div>
+
+                    <div class="backup-card">
+                        <h3>Archive Management</h3>
+                        <div class="archive-info">
+                            <p>Archived Records: <span id="archived-count">--</span></p>
+                            <p>Archive Size: <span id="archive-size">--</span></p>
+                        </div>
+                        <div class="archive-actions">
+                            <button class="btn btn-warning" onclick="archiveOldData()">Archive Old Data</button>
+                            <button class="btn btn-primary" onclick="viewArchives()">View Archives</button>
+                        </div>
+                    </div>
+
+                    <div class="backup-card">
+                        <h3>System Restore</h3>
+                        <div class="restore-info">
+                            <p>Select backup file to restore system data</p>
+                        </div>
+                        <div class="restore-actions">
+                            <input type="file" id="restore-file" accept=".sql,.zip" style="display: none;">
+                            <button class="btn btn-warning" onclick="document.getElementById('restore-file').click()">Select File</button>
+                            <button class="btn btn-danger" onclick="restoreSystem()">Restore System</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>

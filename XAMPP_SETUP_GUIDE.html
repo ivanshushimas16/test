@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Schedule System - XAMPP Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .step {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .step strong {
+            color: #667eea;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .credentials-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .credentials-table th,
+        .credentials-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .credentials-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .credentials-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .list {
+            margin-left: 20px;
+        }
+
+        .list li {
+            margin: 8px 0;
+        }
+
+        ul {
+            list-style-position: inside;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+
+        .nav-button:hover {
+            background: #764ba2;
+        }
+
+        .nav-button.active {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Student Schedule Management System</h1>
+            <p>Complete XAMPP Setup Guide</p>
+        </div>
+
+        <div class="content">
+            <div class="navigation">
+                <button class="nav-button active" onclick="showSection('overview')">Overview</button>
+                <button class="nav-button" onclick="showSection('prerequisites')">Prerequisites</button>
+                <button class="nav-button" onclick="showSection('installation')">Installation</button>
+                <button class="nav-button" onclick="showSection('database')">Database Setup</button>
+                <button class="nav-button" onclick="showSection('access')">Access & Test</button>
+                <button class="nav-button" onclick="showSection('credentials')">Login Credentials</button>
+                <button class="nav-button" onclick="showSection('troubleshooting')">Troubleshooting</button>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="section" style="display: block;">
+                <h2>Overview</h2>
+                <p>This is a complete Student Schedule Management System built with:</p>
+                <ul class="list">
+                    <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+                    <li><strong>Backend:</strong> PHP with XAMPP</li>
+                    <li><strong>Database:</strong> MySQL</li>
+                </ul>
+                <p style="margin-top: 15px;">The system includes three user roles:</p>
+                <ul class="list">
+                    <li><strong>Admin:</strong> Full system management, user management, activity logs, backups</li>
+                    <li><strong>Staff:</strong> Course and schedule management, student enrollment</li>
+                    <li><strong>Student:</strong> View personal schedule and grades</li>
+                </ul>
+            </div>
+
+            <!-- Prerequisites Section -->
+            <div id="prerequisites" class="section" style="display: none;">
+                <h2>Prerequisites</h2>
+                <h3>Required Software</h3>
+                <ul class="list">
+                    <li>XAMPP (includes Apache, PHP, MySQL)</li>
+                    <li>A web browser (Chrome, Firefox, Edge, Safari)</li>
+                    <li>A text editor (optional, for advanced customization)</li>
+                </ul>
+
+                <h3>System Requirements</h3>
+                <ul class="list">
+                    <li>Windows 7 or higher, macOS 10.7 or higher, or Linux</li>
+                    <li>At least 500MB free disk space</li>
+                    <li>No special ports should be blocked</li>
+                </ul>
+
+                <div class="warning">
+                    <strong>⚠ Important:</strong> Make sure ports 80 (Apache) and 3306 (MySQL) are available and not used by other applications.
+                </div>
+            </div>
+
+            <!-- Installation Section -->
+            <div id="installation" class="section" style="display: none;">
+                <h2>Installation Steps</h2>
+
+                <h3>Step 1: Download and Install XAMPP</h3>
+                <div class="step">
+                    <strong>1.</strong> Go to <a href="https://www.apachefriends.org/" target="_blank">https://www.apachefriends.org/</a>
+                </div>
+                <div class="step">
+                    <strong>2.</strong> Download the latest XAMPP version for your operating system
+                </div>
+                <div class="step">
+                    <strong>3.</strong> Run the installer and follow the on-screen instructions
+                </div>
+                <div class="step">
+                    <strong>4.</strong> During installation, make sure to select:
+                    <ul class="list" style="margin-top: 10px;">
+                        <li>Apache</li>
+                        <li>MySQL</li>
+                        <li>PHP</li>
+                        <li>phpMyAdmin (recommended)</li>
+                    </ul>
+                </div>
+
+                <h3>Step 2: Extract Project Files</h3>
+                <div class="step">
+                    <strong>1.</strong> Locate your XAMPP installation directory (usually <code>C:\xampp</code> on Windows or <code>/Applications/XAMPP</code> on Mac)
+                </div>
+                <div class="step">
+                    <strong>2.</strong> Navigate to the <code>htdocs</code> folder
+                </div>
+                <div class="step">
+                    <strong>3.</strong> Create a new folder named <code>student-schedule</code>
+                </div>
+                <div class="step">
+                    <strong>4.</strong> Extract all project files into the <code>student-schedule</code> folder
+                </div>
+
+                <div class="success">
+                    ✓ Your project structure should look like:
+                    <div class="code-block">
+htdocs/
+├── student-schedule/
+│   ├── index.html
+│   ├── login.html
+│   ├── admin-dashboard.html
+│   ├── staff-dashboard.html
+│   ├── student-dashboard.html
+│   ├── api/
+│   ├── js/
+│   ├── css/
+│   ├── config/
+│   ├── includes/
+│   └── scripts/
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Setup Section -->
+            <div id="database" class="section" style="display: none;">
+                <h2>Database Setup</h2>
+
+                <h3>Step 1: Start XAMPP Services</h3>
+                <div class="step">
+                    <strong>1.</strong> Open XAMPP Control Panel
+                </div>
+                <div class="step">
+                    <strong>2.</strong> Click <strong>Start</strong> next to Apache
+                </div>
+                <div class="step">
+                    <strong>3.</strong> Click <strong>Start</strong> next to MySQL
+                </div>
+                <div class="step">
+                    <strong>4.</strong> Both should show as running (green indicator)
+                </div>
+
+                <h3>Step 2: Create Database</h3>
+                <div class="step">
+                    <strong>Option A: Using phpMyAdmin (Recommended)</strong>
+                    <ul class="list" style="margin-top: 10px;">
+                        <li>Open your browser and go to <code>http://localhost/phpmyadmin</code></li>
+                        <li>Click "New" in the left sidebar</li>
+                        <li>Create a new database named <code>student_schedule_db</code></li>
+                        <li>Select the database and go to the "SQL" tab</li>
+                        <li>Open the file <code>scripts/01_create_database.sql</code> in a text editor</li>
+                        <li>Copy all the SQL code and paste it into the SQL tab in phpMyAdmin</li>
+                        <li>Click "Go" to execute</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <strong>Option B: Using Setup Script (Automatic)</strong>
+                    <ul class="list" style="margin-top: 10px;">
+                        <li>Make sure Apache and MySQL are running</li>
+                        <li>In your browser, go to <code>http://localhost/student-schedule/setup.html</code></li>
+                        <li>Follow the on-screen setup wizard</li>
+                        <li>The system will automatically create the database and tables</li>
+                    </ul>
+                </div>
+
+                <h3>Step 3: Insert Sample Data</h3>
+                <div class="step">
+                    <strong>1.</strong> Open phpMyAdmin again at <code>http://localhost/phpmyadmin</code>
+                </div>
+                <div class="step">
+                    <strong>2.</strong> Select the <code>student_schedule_db</code> database
+                </div>
+                <div class="step">
+                    <strong>3.</strong> Go to the "SQL" tab
+                </div>
+                <div class="step">
+                    <strong>4.</strong> Open the file <code>scripts/02_seed_data.sql</code> in a text editor
+                </div>
+                <div class="step">
+                    <strong>5.</strong> Copy all the SQL code and paste it into phpMyAdmin
+                </div>
+                <div class="step">
+                    <strong>6.</strong> Click "Go" to execute
+                </div>
+
+                <div class="success">
+                    ✓ Your database is now ready with sample data! The system includes 3 users for each role (admin, staff, student) for testing.
+                </div>
+            </div>
+
+            <!-- Access & Test Section -->
+            <div id="access" class="section" style="display: none;">
+                <h2>Access & Test the System</h2>
+
+                <h3>Step 1: Access the Application</h3>
+                <div class="step">
+                    <strong>1.</strong> Make sure Apache is running in XAMPP Control Panel
+                </div>
+                <div class="step">
+                    <strong>2.</strong> Open your web browser
+                </div>
+                <div class="step">
+                    <strong>3.</strong> Go to: <code>http://localhost/student-schedule/</code>
+                </div>
+                <div class="step">
+                    <strong>4.</strong> You should see the Student Schedule Management System home page
+                </div>
+
+                <h3>Step 2: Login Test</h3>
+                <div class="step">
+                    <strong>1.</strong> Click on "Admin Login", "Staff Login", or "Student Login"
+                </div>
+                <div class="step">
+                    <strong>2.</strong> Use the credentials from the "Login Credentials" section below
+                </div>
+                <div class="step">
+                    <strong>3.</strong> After login, you should see the respective dashboard
+                </div>
+
+                <h3>Step 3: Test Functionality</h3>
+                <div class="step">
+                    Test the various buttons and features:
+                    <ul class="list" style="margin-top: 10px;">
+                        <li>Add/Edit/Delete items</li>
+                        <li>View schedules and enrollments</li>
+                        <li>Generate reports</li>
+                        <li>Manage users (admin only)</li>
+                    </ul>
+                </div>
+
+                <div class="success">
+                    ✓ If everything is working, the system is successfully installed!
+                </div>
+            </div>
+
+            <!-- Login Credentials Section -->
+            <div id="credentials" class="section" style="display: none;">
+                <h2>Login Credentials</h2>
+                <p>Use these credentials to test the system. All passwords are: <strong>admin123</strong>, <strong>staff123</strong>, or <strong>student123</strong> respectively.</p>
+
+                <h3>Admin Credentials</h3>
+                <table class="credentials-table">
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Access</th>
+                    </tr>
+                    <tr>
+                        <td>admin</td>
+                        <td>admin123</td>
+                        <td>Admin</td>
+                        <td>Full system access, user management, activity logs, backups</td>
+                    </tr>
+                </table>
+
+                <h3>Staff Credentials</h3>
+                <table class="credentials-table">
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Access</th>
+                    </tr>
+                    <tr>
+                        <td>staff001</td>
+                        <td>staff123</td>
+                        <td>Staff</td>
+                        <td>Course management, schedule management, enrollment management</td>
+                    </tr>
+                    <tr>
+                        <td>staff002</td>
+                        <td>staff123</td>
+                        <td>Staff</td>
+                        <td>Course management, schedule management, enrollment management</td>
+                    </tr>
+                </table>
+
+                <h3>Student Credentials</h3>
+                <table class="credentials-table">
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Student ID</th>
+                        <th>Access</th>
+                    </tr>
+                    <tr>
+                        <td>student001</td>
+                        <td>student123</td>
+                        <td>Student</td>
+                        <td>2024-001</td>
+                        <td>View personal schedule and grades</td>
+                    </tr>
+                    <tr>
+                        <td>student002</td>
+                        <td>student123</td>
+                        <td>Student</td>
+                        <td>2024-002</td>
+                        <td>View personal schedule and grades</td>
+                    </tr>
+                    <tr>
+                        <td>student003</td>
+                        <td>student123</td>
+                        <td>Student</td>
+                        <td>2024-003</td>
+                        <td>View personal schedule and grades</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Troubleshooting Section -->
+            <div id="troubleshooting" class="section" style="display: none;">
+                <h2>Troubleshooting</h2>
+
+                <h3>Apache Won't Start</h3>
+                <div class="warning">
+                    <strong>Problem:</strong> Apache shows error or won't start in XAMPP Control Panel
+                </div>
+                <div class="step">
+                    <strong>Solution:</strong>
+                    <ul class="list">
+                        <li>Check if port 80 is already in use by another application</li>
+                        <li>Try stopping and restarting Apache</li>
+                        <li>If using Windows, try running XAMPP Control Panel as Administrator</li>
+                        <li>Check the Apache error logs in the XAMPP folder</li>
+                    </ul>
+                </div>
+
+                <h3>MySQL Won't Start</h3>
+                <div class="warning">
+                    <strong>Problem:</strong> MySQL shows error or won't start
+                </div>
+                <div class="step">
+                    <strong>Solution:</strong>
+                    <ul class="list">
+                        <li>Check if port 3306 is already in use</li>
+                        <li>Try stopping and restarting MySQL</li>
+                        <li>Delete the <code>ibdata1</code> file in the XAMPP data folder (this will delete all data)</li>
+                        <li>Reinstall XAMPP if the issue persists</li>
+                    </ul>
+                </div>
+
+                <h3>Cannot Access http://localhost/student-schedule/</h3>
+                <div class="warning">
+                    <strong>Problem:</strong> Browser shows "Connection refused" or page not found
+                </div>
+                <div class="step">
+                    <strong>Solution:</strong>
+                    <ul class="list">
+                        <li>Make sure Apache is running (green indicator in XAMPP Control Panel)</li>
+                        <li>Check that the project files are in the correct folder: <code>htdocs/student-schedule/</code></li>
+                        <li>Try <code>http://localhost/</code> to see if XAMPP is working at all</li>
+                        <li>Clear browser cache and try again</li>
+                    </ul>
+                </div>
+
+                <h3>Login Page Loads but Cannot Login</h3>
+                <div class="warning">
+                    <strong>Problem:</strong> Login button doesn't work or shows error
+                </div>
+                <div class="step">
+                    <strong>Solution:</strong>
+                    <ul class="list">
+                        <li>Make sure MySQL is running in XAMPP Control Panel</li>
+                        <li>Verify the database was created: go to <code>http://localhost/phpmyadmin</code></li>
+                        <li>Check that <code>student_schedule_db</code> database exists</li>
+                        <li>Verify that the database tables and sample data were inserted correctly</li>
+                        <li>Check the PHP error logs in the XAMPP folder</li>
+                    </ul>
+                </div>
+
+                <h3>Database Connection Error</h3>
+                <div class="warning">
+                    <strong>Problem:</strong> "Database connection failed" error
+                </div>
+                <div class="step">
+                    <strong>Solution:</strong>
+                    <ul class="list">
+                        <li>Verify MySQL is running</li>
+                        <li>Check the database credentials in <code>config/database.php</code></li>
+                        <li>Default XAMPP MySQL credentials: Username = root, Password = (empty)</li>
+                        <li>Try accessing phpMyAdmin to test the connection</li>
+                    </ul>
+                </div>
+
+                <h3>Buttons Don't Work or Show No Response</h3>
+                <div class="warning">
+                    <strong>Problem:</strong> Dashboard buttons don't respond to clicks
+                </div>
+                <div class="step">
+                    <strong>Solution:</strong>
+                    <ul class="list">
+                        <li>Open browser Developer Tools (F12) and check the Console for errors</li>
+                        <li>Check the Network tab to see if API calls are being made</li>
+                        <li>Make sure JavaScript is enabled in your browser</li>
+                        <li>Try a different browser to see if the issue persists</li>
+                    </ul>
+                </div>
+
+                <h3>Need More Help?</h3>
+                <div class="step">
+                    <strong>For advanced troubleshooting:</strong>
+                    <ul class="list">
+                        <li>Check browser console: Press <strong>F12</strong> → Console tab</li>
+                        <li>Check network calls: Press <strong>F12</strong> → Network tab → try an action</li>
+                        <li>Check PHP error logs in XAMPP folder</li>
+                        <li>Test direct API calls: <code>http://localhost/student-schedule/api/test-server.php</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p><strong>Student Schedule Management System</strong></p>
+                <p>Version 1.0 | Built for Cebu Eastern College</p>
+                <p>For support, contact the IT department</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+
+            // Update button states
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

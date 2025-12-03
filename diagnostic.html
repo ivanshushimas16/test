@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Diagnostic - Student Schedule System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .diagnostic-card {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .test-results { margin-top: 20px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-card">
+        <h1>🔧 System Diagnostic Tool</h1>
+        <p>This tool will help diagnose network and server issues with the Student Schedule System.</p>
+        
+        <div class="diagnostic-card">
+            <h2>Server Tests</h2>
+            <button onclick="testPHP()">Test PHP Server</button>
+            <button onclick="testDatabase()">Test Database Connection</button>
+            <button onclick="testLogin()">Test Login API</button>
+            <button onclick="testAllAPIs()">Test All APIs</button>
+            <div id="test-results" class="test-results"></div>
+        </div>
+
+        <div class="diagnostic-card">
+            <h2>Quick Login Test</h2>
+            <form id="quickLoginForm">
+                <div style="margin: 10px 0;">
+                    <label>Username:</label>
+                    <input type="text" name="username" value="admin" style="margin-left: 10px; padding: 5px;">
+                </div>
+                <div style="margin: 10px 0;">
+                    <label>Password:</label>
+                    <input type="password" name="password" value="admin123" style="margin-left: 10px; padding: 5px;">
+                </div>
+                <div style="margin: 10px 0;">
+                    <label>Role:</label>
+                    <select name="role" style="margin-left: 10px; padding: 5px;">
+                        <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
+                <button type="submit">Test Login</button>
+            </form>
+            <div id="login-results"></div>
+        </div>
+
+        <div class="diagnostic-card">
+            <h2>System Information</h2>
+            <div id="system-info">
+                <p><strong>Current URL:</strong> <span id="current-url"></span></p>
+                <p><strong>Base Path:</strong> <span id="base-path"></span></p>
+                <p><strong>Expected API Path:</strong> <span id="api-path"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Display system information
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('base-path').textContent = window.location.origin + window.location.pathname.replace('diagnostic.html', '');
+        document.getElementById('api-path').textContent = window.location.origin + window.location.pathname.replace('diagnostic.html', '') + 'api/';
+
+        // Test PHP server
+        function testPHP() {
+            addResult('Testing PHP server...', 'warning');
+            
+            fetch('test-php.php')
+                .then(response => response.text())
+                .then(data => {
+                    if (data.includes('PHP is working')) {
+                        addResult('✅ PHP server is working correctly', 'success');
+                    } else {
+                        addResult('❌ PHP server response unexpected: ' + data, 'error');
+                    }
+                })
+                .catch(error => {
+                    addResult('❌ PHP server test failed: ' + error.message, 'error');
+                    addResult('💡 Make sure XAMPP is running and you\'re accessing via http://localhost/', 'warning');
+                });
+        }
+
+        // Test database connection
+        function testDatabase() {
+            addResult('Testing database connection...', 'warning');
+            
+            fetch('test-db.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        addResult('✅ Database connection successful', 'success');
+                        addResult('Database info: ' + JSON.stringify(data.info), 'success');
+                    } else {
+                        addResult('❌ Database connection failed: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    addResult('❌ Database test failed: ' + error.message, 'error');
+                });
+        }
+
+        // Test login API
+        function testLogin() {
+            addResult('Testing login API...', 'warning');
+            
+            const testData = {
+                username: 'admin',
+                password: 'admin123',
+                role: 'admin'
+            };
+
+            fetch('api/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(testData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        addResult('✅ Login API working correctly', 'success');
+                        addResult('Login response: ' + JSON.stringify(data), 'success');
+                    } else {
+                        addResult('❌ Login failed: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    addResult('❌ Login API test failed: ' + error.message, 'error');
+                });
+        }
+
+        // Test all APIs
+        function testAllAPIs() {
+            const apis = [
+                'api/login.php',
+                'api/logout.php',
+                'api/check-session.php',
+                'config/database.php'
+            ];
+
+            addResult('Testing all API endpoints...', 'warning');
+
+            apis.forEach(api => {
+                fetch(api)
+                    .then(response => {
+                        if (response.ok) {
+                            addResult(`✅ ${api} - Accessible`, 'success');
+                        } else {
+                            addResult(`❌ ${api} - HTTP ${response.status}`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        addResult(`❌ ${api} - ${error.message}`, 'error');
+                    });
+            });
+        }
+
+        // Handle quick login form
+        document.getElementById('quickLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const loginData = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                role: formData.get('role')
+            };
+
+            document.getElementById('login-results').innerHTML = '<div class="status warning">Testing login...</div>';
+
+            fetch('api/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const resultDiv = document.getElementById('login-results');
+                    if (data.success) {
+                        resultDiv.innerHTML = `<div class="status success">✅ Login successful!<br>User: ${data.user.username}<br>Role: ${data.user.role}</div>`;
+                    } else {
+                        resultDiv.innerHTML = `<div class="status error">❌ Login failed: ${data.message}</div>`;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('login-results').innerHTML = `<div class="status error">❌ Network error: ${error.message}</div>`;
+                });
+        });
+
+        // Helper function to add test results
+        function addResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.textContent = message;
+            resultsDiv.appendChild(resultElement);
+        }
+    </script>
+</body>
+</html>

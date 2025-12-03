@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - CEC Student Schedule System</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Student Portal</h2>
+                <p id="student-info">Loading...</p>
+            </div>
+            <ul class="nav-menu">
+                <!-- Removed "My Grades" and "Profile" navigation links -->
+                <li class="nav-item">
+                    <a href="#schedule" class="nav-link active" data-section="schedule">My Schedule</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <h1 id="page-title">My Class Schedule</h1>
+                <div class="user-info">
+                    <span id="welcome-message">Welcome, Student</span>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </header>
+
+            <!-- Removed grades and profile sections, keeping only schedule section -->
+            <section id="schedule-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Current Schedule</h2>
+                    <div class="section-actions">
+                        <select id="semester-filter">
+                            <option value="1st Semester">1st Semester</option>
+                            <option value="2nd Semester">2nd Semester</option>
+                        </select>
+                        <select id="year-filter">
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2023-2024">2023-2024</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="printSchedule()">Print Schedule</button>
+                    </div>
+                </div>
+
+                <div class="schedule-container">
+                    <div class="schedule-grid" id="schedule-grid">
+                        <!-- Schedule will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="schedule-list">
+                    <h3>Enrolled Courses</h3>
+                    <table class="data-table" id="courses-table">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Instructor</th>
+                                <th>Schedule</th>
+                                <th>Room</th>
+                                <th>Credits</th>
+                            </tr>
+                        </thead>
+                        <tbody id="courses-tbody">
+                            <!-- Courses will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/student-dashboard.js"></script>
+</body>
+</html>
